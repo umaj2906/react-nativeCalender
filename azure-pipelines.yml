@@ -13,8 +13,9 @@ steps:
 
 - script: |
     npm install -g expo-cli
-    npm ci
+    npm install
   displayName: 'Install dependencies'
+
 
 - script: |
     expo --version
