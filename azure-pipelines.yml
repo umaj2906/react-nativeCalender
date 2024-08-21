@@ -4,7 +4,6 @@ trigger:
       - main # Adjust this to your primary branch
 
 pool: ubuntu-latest
-  
 
 steps:
 - task: NodeTool@0
@@ -18,9 +17,18 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
+    expo --version
+    ls -la android
+  displayName: 'Verify Setup'
+
+- script: |
     cd android
     ./gradlew bundleRelease # Generates an AAB for Play Store
   displayName: 'Build Android App Bundle'
+
+- script: |
+    ls -la app/build/outputs/bundle/release
+  displayName: 'List Output Directory'
 
 - task: CopyFiles@2
   inputs:
