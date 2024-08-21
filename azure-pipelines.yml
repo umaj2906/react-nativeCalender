@@ -1,0 +1,35 @@
+trigger:
+  branches:
+    include:
+      - main # Adjust this to your primary branch
+
+pool: ubuntu-latest
+  
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.x' # Node.js version required by your project
+  displayName: 'Install Node.js'
+
+- script: |
+    npm install -g expo-cli
+    npm ci
+  displayName: 'Install dependencies'
+
+- script: |
+    cd android
+    ./gradlew bundleRelease # Generates an AAB for Play Store
+  displayName: 'Build Android App Bundle'
+
+- task: CopyFiles@2
+  inputs:
+    contents: 'android/app/build/outputs/bundle/release/app-release.aab'
+    targetFolder: '$(Build.ArtifactStagingDirectory)'
+  displayName: 'Copy AAB to Staging Directory'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'drop'
+  displayName: 'Publish Artifact'
