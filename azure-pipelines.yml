@@ -23,6 +23,11 @@ steps:
   displayName: 'Verify Setup'
 
 - script: |
+    chmod +x ./gradlew
+    ./gradlew bundleRelease
+  displayName: 'Build Android App Bundle'
+
+- script: |
     cd android
     ./gradlew bundleRelease # Generates an AAB for Play Store
   displayName: 'Build Android App Bundle'
